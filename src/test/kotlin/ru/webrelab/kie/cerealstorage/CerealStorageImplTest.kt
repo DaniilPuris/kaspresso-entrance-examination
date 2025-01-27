@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 
 class CerealStorageImplTest {
 
-    private val storage = CerealStorageImpl(10f, 20f)
+    private val storage = CerealStorageImpl(10f, 22f)
 
 
     @Test
@@ -85,12 +85,14 @@ class CerealStorageImplTest {
     }
 
     @Test
-    fun `should remove empty container`() {
+    fun `should handle empty container removal`() {
         storage.addCereal(Cereal.RICE, 5f)
-        storage.getCereal(Cereal.RICE, 5f) 
-        val result = storage.removeContainer(Cereal.RICE)
-        assertTrue(result)
+        assertFalse(storage.removeContainer(Cereal.RICE))
+        assertEquals(5f, storage.getAmount(Cereal.RICE), 0.01f)
+
+        storage.getCereal(Cereal.RICE, 5f)
         assertEquals(0f, storage.getAmount(Cereal.RICE), 0.01f)
+        assertFalse(storage.removeContainer(Cereal.RICE))
     }
 
     @Test
@@ -166,7 +168,7 @@ class CerealStorageImplTest {
     fun `toString should return storage info with one cereal`() {
         storage.addCereal(Cereal.RICE, 7.5f)
         val expected = "Хранилище: вместимость = 20.0, размер контейнера = 10.0\n" +
-                      "Рис: 7.5/10.0"
+                "Рис: 7.5/10.0"
         assertEquals(expected, storage.toString())
     }
 
@@ -175,8 +177,8 @@ class CerealStorageImplTest {
         storage.addCereal(Cereal.RICE, 7.5f)
         storage.addCereal(Cereal.BUCKWHEAT, 4.0f)
         val expected = "Хранилище: вместимость = 20.0, размер контейнера = 10.0\n" +
-                      "Гречка: 4.0/10.0\n" +
-                      "Рис: 7.5/10.0"
+                "Гречка: 4.0/10.0\n" +
+                "Рис: 7.5/10.0"
         assertEquals(expected, storage.toString())
     }
 }
